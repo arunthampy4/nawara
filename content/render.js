@@ -109,7 +109,7 @@ module.exports = function render(ctx) {
     ];
 
     const stats = [
-      { n: "500+", l: "Clients across Muscat" },
+      { n: "2000+", l: "Customers across Muscat" },
       { n: "6", l: "Specialised services" },
       { n: "100%", l: "Eco-friendly products" },
       { n: "7", l: "Days a week support" },
@@ -162,7 +162,7 @@ module.exports = function render(ctx) {
         </div>
         <div class="absolute -bottom-5 right-2 flex items-center gap-3 rounded-2xl bg-white px-5 py-4 shadow-float sm:right-6 animate-floaty">
           <span class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-gradient text-white">${I.shieldCheck}</span>
-          <span><span class="block font-display text-lg font-extrabold text-ink">500+ Clients</span><span class="block text-xs text-slatey-400">across Muscat</span></span>
+          <span><span class="block font-display text-lg font-extrabold text-ink">2000+ Customers</span><span class="block text-xs text-slatey-400">across Muscat</span></span>
         </div>
       </div>
     </div>
@@ -269,7 +269,7 @@ module.exports = function render(ctx) {
         <div class="lg:col-span-5" data-reveal>
           <div class="relative">
             <div class="rounded-3xl bg-brand-gradient-soft p-8">
-              ${logoMark("h-16 w-16")}
+              ${logoMark("h-28 w-48")}
               <p class="mt-6 font-display text-2xl font-extrabold text-ink">Cleaning Company in Oman</p>
               <p class="mt-3 text-lg" dir="rtl" lang="ar">${BIZ.nameAr}</p>
               <div class="mt-8 grid grid-cols-2 gap-4">
@@ -491,7 +491,7 @@ module.exports = function render(ctx) {
     description:
       "Nawara Muscat Trading & Contracting — professional cleaning, pest control, termite treatment, sanitization and cleaning manpower supply across Muscat, Oman. Book your service today.",
     prefix: "",
-    active: "",
+    active: "home",
     canonical: BIZ.domain + "/",
     body: homeBody(),
   });
