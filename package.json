@@ -1,0 +1,14 @@
+{
+  "name": "nawara-muscat",
+  "version": "1.0.0",
+  "description": "Nawara Muscat Trading & Contracting - Cleaning & Maintenance Services website",
+  "private": true,
+  "scripts": {
+    "build": "tailwindcss -i ./src/input.css -o ./dist/styles.css --minify",
+    "watch": "tailwindcss -i ./src/input.css -o ./dist/styles.css --watch"
+  },
+  "devDependencies": {
+    "playwright": "^1.61.1",
+    "tailwindcss": "^3.4.17"
+  }
+}
