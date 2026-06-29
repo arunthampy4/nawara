@@ -68,11 +68,16 @@ function logoMark(cls = "h-10 w-10") {
 }
 
 function logoFull(prefix) {
-  return `<a href="${prefix}index.html" class="flex items-center gap-3 group">
-    ${logoMark("h-10 w-10 sm:h-11 sm:w-11 transition-transform group-hover:scale-105")}
-    <span class="flex flex-col leading-tight">
-      <span class="font-display font-extrabold text-[15px] sm:text-base text-ink tracking-tight">Nawara Muscat</span>
-      <span class="text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.14em] text-slatey-400">Trading &amp; Contracting</span>
+  // Header shows the full brand lockup (assets/logo-mark.svg) on its own.
+  // Falls back to the inline icon + text if the file is missing.
+  return `<a href="${prefix}index.html" class="flex items-center group" aria-label="Nawara Muscat Trading &amp; Contracting — Home">
+    <img src="${prefix}assets/logo-mark.svg" alt="Nawara Muscat Trading &amp; Contracting" class="h-16 w-auto sm:h-[84px] transition-transform group-hover:scale-[1.03]" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+    <span style="display:none" class="items-center gap-3">
+      ${logoSvg("h-11 w-11")}
+      <span class="flex flex-col leading-tight">
+        <span class="font-display font-extrabold text-[15px] sm:text-base text-ink tracking-tight">Nawara Muscat</span>
+        <span class="text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.14em] text-slatey-400">Trading &amp; Contracting</span>
+      </span>
     </span>
   </a>`;
 }
@@ -126,7 +131,7 @@ function header(prefix, active) {
   const link = (href, label, id) =>
     `<a href="${href}" class="nav-link ${active === id ? "!text-brand-blue" : ""}">${label}</a>`;
   return `<header class="sticky top-0 z-50 border-b border-mist-100 bg-white/85 backdrop-blur-md">
-  <div class="container-x flex h-[68px] items-center justify-between gap-4">
+  <div class="container-x flex min-h-[92px] items-center justify-between gap-4 py-2">
     ${logoFull(prefix)}
     <nav class="hidden items-center gap-8 lg:flex">
       ${link(prefix + "index.html", "Home", "home")}
@@ -172,7 +177,7 @@ function footer(prefix) {
     <div class="grid gap-12 lg:grid-cols-4">
       <div class="lg:col-span-1">
         <div class="flex items-center gap-3">
-          ${logoMark("h-11 w-11")}
+          ${logoSvg("h-11 w-11")}
           <span class="flex flex-col leading-tight">
             <span class="font-display font-extrabold text-white">Nawara Muscat</span>
             <span class="text-[11px] font-semibold uppercase tracking-[0.14em] text-slatey-400">Trading &amp; Contracting</span>
