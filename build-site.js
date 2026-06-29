@@ -25,7 +25,7 @@ const BIZ = {
 };
 
 const whatsappLink = (msg) =>
-  `https://wa.me/${BIZ.whatsapp}?text=${encodeURIComponent(msg)}`;
+  `https://api.whatsapp.com/send?phone=${BIZ.whatsapp}&text=${encodeURIComponent(msg)}`;
 const WA_DEFAULT = whatsappLink(
   "Hi Nawara Muscat, I'd like to know more about your services."
 );

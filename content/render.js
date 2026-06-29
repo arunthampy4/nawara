@@ -65,7 +65,7 @@ module.exports = function render(ctx) {
               "%0APhone: "+encodeURIComponent(f.phone.value)+
               "%0AService: "+encodeURIComponent(f.service.value)+
               "%0AMessage: "+encodeURIComponent(f.message.value);
-        window.open("https://wa.me/${BIZ.whatsapp}?text="+t,"_blank");
+        window.open("https://api.whatsapp.com/send?phone=${BIZ.whatsapp}&text="+t,"_blank");
         return false;
       }
     </script>`;
