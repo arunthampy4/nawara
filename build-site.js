@@ -70,7 +70,7 @@ function logoMark(cls = "h-10 w-10") {
 function logoFull(prefix) {
   // Header shows the client's exact brand logo (assets/nawara-muscat-oman.svg).
   return `<a href="${prefix}index.html" class="flex items-center group" aria-label="Nawara Muscat Trading &amp; Contracting — Home">
-    <img src="${prefix}assets/nawara-muscat-oman.svg" alt="Nawara Muscat Trading &amp; Contracting" style="height:clamp(52px,6.5vw,88px);width:auto;max-width:300px;object-fit:contain;display:block" class="transition-transform group-hover:scale-[1.02]" onerror="this.style.visibility='hidden';" />
+    <img src="${prefix}assets/nawara-muscat-oman.svg" alt="Nawara Muscat Trading &amp; Contracting" style="height:clamp(64px,8.5vw,116px);width:auto;max-width:360px;object-fit:contain;display:block" class="transition-transform group-hover:scale-[1.02]" onerror="this.style.visibility='hidden';" />
   </a>`;
 }
 
@@ -123,21 +123,21 @@ function header(prefix, active) {
   const link = (href, label, id) =>
     `<a href="${href}" class="nav-link ${active === id ? "!text-brand-blue" : ""}">${label}</a>`;
   return `<header class="sticky top-0 z-50 border-b border-mist-100 bg-white/85 backdrop-blur-md">
-  <div class="container-x flex min-h-[88px] items-center justify-between gap-4 py-2 sm:min-h-[112px]">
+  <div class="container-x flex min-h-[88px] items-center justify-between gap-4 py-2 sm:min-h-[128px]">
     ${logoFull(prefix)}
     <nav class="hidden items-center gap-8 lg:flex">
       ${link(prefix + "index.html", "Home", "home")}
-      ${link(prefix + "index.html#services", "Services", "services")}
-      ${link(prefix + "index.html#why", "Why Us", "why")}
-      ${link(prefix + "index.html#about", "About", "about")}
-      ${link(prefix + "index.html#contact", "Contact", "contact")}
+      ${link(prefix + "services.html", "Services", "services")}
+      ${link(prefix + "why-choose-us.html", "Why Us", "why")}
+      ${link(prefix + "about.html", "About", "about")}
+      ${link(prefix + "contact.html", "Contact", "contact")}
     </nav>
     <div class="flex items-center gap-3">
       <a href="tel:${BIZ.phoneTel}" class="hidden items-center gap-2 text-sm font-bold text-ink md:flex">
         <span class="flex h-9 w-9 items-center justify-center rounded-full bg-brand-blue/10 text-brand-blue">${I.phone}</span>
         <span>${BIZ.phoneDisplay}</span>
       </a>
-      <a href="${prefix}index.html#contact" class="btn-gradient !px-5 !py-2.5 hidden sm:inline-flex">Book Now</a>
+      <a href="${prefix}contact.html" class="btn-gradient !px-5 !py-2.5 hidden sm:inline-flex">Book Now</a>
       <button id="menuBtn" aria-label="Open menu" class="lg:hidden flex h-10 w-10 items-center justify-center rounded-xl border border-mist-200 text-ink">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="h-5 w-5"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
       </button>
@@ -146,10 +146,10 @@ function header(prefix, active) {
   <div id="mobileMenu" class="hidden border-t border-mist-100 bg-white lg:hidden">
     <nav class="container-x flex flex-col gap-1 py-4">
       <a href="${prefix}index.html" class="rounded-lg px-3 py-2.5 font-semibold text-ink hover:bg-mist-50">Home</a>
-      <a href="${prefix}index.html#services" class="rounded-lg px-3 py-2.5 font-semibold text-ink hover:bg-mist-50">Services</a>
-      <a href="${prefix}index.html#why" class="rounded-lg px-3 py-2.5 font-semibold text-ink hover:bg-mist-50">Why Us</a>
-      <a href="${prefix}index.html#about" class="rounded-lg px-3 py-2.5 font-semibold text-ink hover:bg-mist-50">About</a>
-      <a href="${prefix}index.html#contact" class="rounded-lg px-3 py-2.5 font-semibold text-ink hover:bg-mist-50">Contact</a>
+      <a href="${prefix}services.html" class="rounded-lg px-3 py-2.5 font-semibold text-ink hover:bg-mist-50">Services</a>
+      <a href="${prefix}why-choose-us.html" class="rounded-lg px-3 py-2.5 font-semibold text-ink hover:bg-mist-50">Why Us</a>
+      <a href="${prefix}about.html" class="rounded-lg px-3 py-2.5 font-semibold text-ink hover:bg-mist-50">About</a>
+      <a href="${prefix}contact.html" class="rounded-lg px-3 py-2.5 font-semibold text-ink hover:bg-mist-50">Contact</a>
       <div class="mt-2 flex gap-2">
         <a href="tel:${BIZ.phoneTel}" class="btn-outline flex-1">Call</a>
         <a href="${WA_DEFAULT}" target="_blank" rel="noopener" class="btn-whatsapp flex-1">WhatsApp</a>
@@ -168,11 +168,12 @@ function footer(prefix) {
   <div class="container-x py-16">
     <div class="grid gap-12 lg:grid-cols-4">
       <div class="lg:col-span-1">
-        <div class="inline-flex items-center rounded-2xl bg-white p-3 shadow-soft">
-          <img src="${prefix}assets/nawara-muscat-oman.svg" alt="Nawara Muscat Trading &amp; Contracting" style="height:74px;width:auto;max-width:240px;object-fit:contain;display:block" onerror="this.style.visibility='hidden';" />
+        <div class="flex flex-col leading-tight">
+          <span class="font-display text-2xl font-extrabold text-white">Nawara Muscat</span>
+          <span class="mt-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-cyan">Trading &amp; Contracting</span>
         </div>
+        <p class="mt-3 font-display text-lg text-white/80" dir="rtl" lang="ar">${BIZ.nameAr}</p>
         <p class="mt-5 text-sm leading-relaxed text-slatey-400">A locally based Omani company for cleaning, deep sanitizing, maintenance, pest control and manpower supply across Muscat.</p>
-        <p class="mt-4 font-display text-lg" dir="rtl" lang="ar">${BIZ.nameAr}</p>
       </div>
       <div>
         <h4 class="text-sm font-bold uppercase tracking-wider text-white">Services</h4>
@@ -181,10 +182,10 @@ function footer(prefix) {
       <div>
         <h4 class="text-sm font-bold uppercase tracking-wider text-white">Company</h4>
         <ul class="mt-5 space-y-3 text-sm">
-          <li><a href="${prefix}index.html#about" class="text-slatey-400 hover:text-white transition-colors">About Us</a></li>
-          <li><a href="${prefix}index.html#why" class="text-slatey-400 hover:text-white transition-colors">Why Choose Us</a></li>
-          <li><a href="${prefix}index.html#services" class="text-slatey-400 hover:text-white transition-colors">All Services</a></li>
-          <li><a href="${prefix}index.html#contact" class="text-slatey-400 hover:text-white transition-colors">Get a Free Quote</a></li>
+          <li><a href="${prefix}about.html" class="text-slatey-400 hover:text-white transition-colors">About Us</a></li>
+          <li><a href="${prefix}why-choose-us.html" class="text-slatey-400 hover:text-white transition-colors">Why Choose Us</a></li>
+          <li><a href="${prefix}services.html" class="text-slatey-400 hover:text-white transition-colors">All Services</a></li>
+          <li><a href="${prefix}contact.html" class="text-slatey-400 hover:text-white transition-colors">Get a Free Quote</a></li>
         </ul>
       </div>
       <div>

@@ -2,15 +2,35 @@ const fs = require("fs");
 const path = require("path");
 
 module.exports = function render(ctx) {
-  const { BIZ, I, SERVICE_ICON, SERVICES, whatsappLink, WA_DEFAULT, logoMark, layout } = ctx;
+  const { BIZ, I, SERVICE_ICON, SERVICES, whatsappLink, WA_DEFAULT, layout } = ctx;
+
+  /* ---------------- data ---------------- */
+  const why = [
+    { icon: I.shieldCheck, t: "Trusted Local Experts", d: "A locally based Omani company operating with high ethical standards and proven processes." },
+    { icon: I.bolt, t: "Fast Response Team", d: "Quick scheduling and a reliable crew that shows up on time, every time." },
+    { icon: I.star, t: "Quality You Can See", d: "Tested methods, German-recommended products and high-end equipment for consistent results." },
+    { icon: I.users, t: "Skilled & Vetted Staff", d: "Trained, background-checked professionals for residential and commercial sites." },
+  ];
+  const stats = [
+    { n: "2000+", l: "Customers across Muscat" },
+    { n: "6", l: "Specialised services" },
+    { n: "100%", l: "Eco-friendly products" },
+    { n: "7", l: "Days a week support" },
+  ];
+  const faqs = [
+    { q: "Which areas in Muscat do you cover?", a: "We serve homes and businesses across all of Muscat and the wider Oman region — including Al Khuwair, Ruwi, Al Mawaleh, Seeb, Bawshar and more." },
+    { q: "Are your products safe for children and pets?", a: "Yes. We use non-toxic, eco-friendly products and German-recommended equipment that are safe around children, pets and all surface types." },
+    { q: "Do you offer one-off jobs or only contracts?", a: "Both. You can book a single one-off job or set up a recurring daily, weekly or monthly schedule — whatever suits you." },
+    { q: "How do I get a price?", a: "Call or WhatsApp us, or send the quick quote form. For larger jobs we'll do a short survey and give you a clear, fixed price with no surprises." },
+    { q: "Is the pest control treatment odorless and safe to stay during?", a: "Our standard insect treatments are odorless and hassle-free, so in most cases there's no need to leave the premises. We'll always advise you per job." },
+  ];
+  const testimonials = [
+    { q: "Fast, professional and thorough. The team deep-cleaned our villa before moving in and it felt brand new. Highly recommended.", n: "Ahmed Al-Balushi", r: "Homeowner, Al Khuwair" },
+    { q: "We use Nawara for monthly office cleaning and pest control. Always on time, always reliable — exactly what a busy office needs.", n: "Mariam Al-Saadi", r: "Office Manager, Ruwi" },
+    { q: "Booked the sofa and carpet cleaning and the results were impressive. Friendly staff and a very fair price. Will use again.", n: "John Mathew", r: "Resident, Al Mawaleh" },
+  ];
 
   /* ---------------- shared snippets ---------------- */
-  const heroCTAs = (prefix) => `
-    <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-      <a href="${prefix}index.html#contact" class="btn-gradient text-base !px-7 !py-4">Book Service ${I.arrow}</a>
-      <a href="${WA_DEFAULT}" target="_blank" rel="noopener" class="btn-whatsapp text-base !px-7 !py-4">${I.whatsapp} WhatsApp Us</a>
-    </div>`;
-
   const quoteForm = `
     <form class="space-y-4" action="${WA_DEFAULT}" method="get" onsubmit="return nawaraQuote(event)">
       <div class="grid gap-4 sm:grid-cols-2">
@@ -50,50 +70,17 @@ module.exports = function render(ctx) {
       }
     </script>`;
 
-  const contactSection = (prefix) => `
-  <section id="contact" class="bg-mist-50 py-20 sm:py-28">
-    <div class="container-x">
-      <div class="grid gap-10 lg:grid-cols-2 lg:gap-16">
-        <div data-reveal>
-          <span class="pill-blue">Get in touch</span>
-          <h2 class="mt-5 text-3xl sm:text-4xl">Book your service or request a free quote</h2>
-          <p class="mt-4 max-w-md text-lg text-slatey-500">Tell us what you need and our team will get back to you fast. Reliable cleaning, sanitization, pest control and manpower — across Muscat.</p>
-          <div class="mt-8 space-y-4">
-            <a href="tel:${BIZ.phoneTel}" class="flex items-center gap-4 rounded-2xl border border-mist-200 bg-white p-4 shadow-card transition hover:shadow-cardHover">
-              <span class="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-blue/10 text-brand-blue">${I.phone}</span>
-              <span><span class="block text-xs font-semibold uppercase tracking-wider text-slatey-400">Call us</span><span class="block font-bold text-ink">${BIZ.phoneDisplay}</span></span>
-            </a>
-            <a href="${WA_DEFAULT}" target="_blank" rel="noopener" class="flex items-center gap-4 rounded-2xl border border-mist-200 bg-white p-4 shadow-card transition hover:shadow-cardHover">
-              <span class="flex h-12 w-12 items-center justify-center rounded-xl bg-[#1FA855]/10 text-[#1FA855]">${I.whatsapp}</span>
-              <span><span class="block text-xs font-semibold uppercase tracking-wider text-slatey-400">WhatsApp</span><span class="block font-bold text-ink">Chat with our team</span></span>
-            </a>
-            <a href="mailto:${BIZ.email}" class="flex items-center gap-4 rounded-2xl border border-mist-200 bg-white p-4 shadow-card transition hover:shadow-cardHover">
-              <span class="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-green/10 text-brand-leaf">${I.mail}</span>
-              <span><span class="block text-xs font-semibold uppercase tracking-wider text-slatey-400">Email</span><span class="block font-bold text-ink">${BIZ.email}</span></span>
-            </a>
-            <div class="flex items-center gap-4 rounded-2xl border border-mist-200 bg-white p-4 shadow-card">
-              <span class="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-teal/10 text-brand-teal">${I.location}</span>
-              <span><span class="block text-xs font-semibold uppercase tracking-wider text-slatey-400">Location</span><span class="block font-bold text-ink">${BIZ.address}</span></span>
-            </div>
-          </div>
-        </div>
-        <div data-reveal>
-          <div class="rounded-3xl border border-mist-200 bg-white p-7 shadow-soft sm:p-9">
-            <h3 class="text-xl font-bold text-ink">Request a free quote</h3>
-            <p class="mt-1 mb-6 text-sm text-slatey-500">No obligation — just honest advice and a fair price.</p>
-            ${quoteForm}
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>`;
+  const faqJsonLd = `<script type="application/ld+json">${JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+  })}</script>`;
 
-  /* ---------------- HOME ---------------- */
-  function homeBody() {
-    const prefix = "";
-    const serviceCards = SERVICES.map(
+  /* ---------------- section builders (prefix-aware) ---------------- */
+  const serviceCards = (prefix) =>
+    SERVICES.map(
       (s) => `
-      <a href="services/${s.slug}.html" class="service-card group" data-reveal>
+      <a href="${prefix}services/${s.slug}.html" class="service-card group" data-reveal>
         <span class="icon-badge">${SERVICE_ICON[s.iconKey]}</span>
         <h3 class="mt-6 text-xl">${s.name}</h3>
         <p class="mt-2 flex-1 text-slatey-500">${s.short}</p>
@@ -101,39 +88,7 @@ module.exports = function render(ctx) {
       </a>`
     ).join("\n");
 
-    const why = [
-      { icon: I.shieldCheck, t: "Trusted Local Experts", d: "A locally based Omani company operating with high ethical standards and proven processes." },
-      { icon: I.bolt, t: "Fast Response Team", d: "Quick scheduling and a reliable crew that shows up on time, every time." },
-      { icon: I.star, t: "Quality You Can See", d: "Tested methods, German-recommended products and high-end equipment for consistent results." },
-      { icon: I.users, t: "Skilled & Vetted Staff", d: "Trained, background-checked professionals for residential and commercial sites." },
-    ];
-
-    const stats = [
-      { n: "2000+", l: "Customers across Muscat" },
-      { n: "6", l: "Specialised services" },
-      { n: "100%", l: "Eco-friendly products" },
-      { n: "7", l: "Days a week support" },
-    ];
-
-    const faqs = [
-      { q: "Which areas in Muscat do you cover?", a: "We serve homes and businesses across all of Muscat and the wider Oman region — including Al Khuwair, Ruwi, Al Mawaleh, Seeb, Bawshar and more." },
-      { q: "Are your cleaning products safe for children and pets?", a: "Yes. We use non-toxic, eco-friendly products and German-recommended equipment that are safe around children, pets and all surface types." },
-      { q: "Do you offer one-off cleans or only contracts?", a: "Both. You can book a single one-off clean or set up a recurring daily, weekly or monthly schedule — whatever suits you." },
-      { q: "How do I get a price?", a: "Call or WhatsApp us, or send the quick quote form. For larger jobs we'll do a short survey and give you a clear, fixed price with no surprises." },
-      { q: "Is the pest control treatment odorless and safe to stay during?", a: "Our standard insect treatments are odorless and hassle-free, so in most cases there's no need to leave the premises. We'll always advise you per job." },
-    ];
-    const faqJsonLd = `<script type="application/ld+json">${JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      mainEntity: faqs.map((f) => ({
-        "@type": "Question",
-        name: f.q,
-        acceptedAnswer: { "@type": "Answer", text: f.a },
-      })),
-    })}</script>`;
-
-    return `
-  <!-- HERO -->
+  const heroSection = (prefix) => `
   <section class="relative overflow-hidden">
     <div class="pointer-events-none absolute -left-32 -top-32 h-96 w-96 rounded-full bg-brand-blue/10 blur-3xl"></div>
     <div class="pointer-events-none absolute -right-24 top-40 h-80 w-80 rounded-full bg-brand-green/10 blur-3xl"></div>
@@ -144,17 +99,20 @@ module.exports = function render(ctx) {
           Professional <span class="gradient-text">Cleaning &amp; Maintenance</span> Services in Muscat
         </h1>
         <p class="mt-6 max-w-xl text-lg leading-relaxed text-slatey-500">
-          Reliable cleaning solutions for homes and businesses — including deep cleaning, pest control, sanitization, termite treatment and manpower supply.
+          Reliable solutions for homes and businesses — cleaning, pest control, sanitization, termite treatment and manpower supply, all from one trusted team.
         </p>
-        ${heroCTAs(prefix)}
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+          <a href="${prefix}contact.html" class="btn-gradient text-base !px-7 !py-4">Book Service ${I.arrow}</a>
+          <a href="${WA_DEFAULT}" target="_blank" rel="noopener" class="btn-whatsapp text-base !px-7 !py-4">${I.whatsapp} WhatsApp Us</a>
+        </div>
         <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
-          <div class="flex items-center gap-2.5 text-sm font-semibold text-ink"><span class="text-brand-leaf">${I.shieldCheck}</span> Trusted Local Cleaning Experts</div>
+          <div class="flex items-center gap-2.5 text-sm font-semibold text-ink"><span class="text-brand-leaf">${I.shieldCheck}</span> Trusted Local Experts</div>
           <div class="flex items-center gap-2.5 text-sm font-semibold text-ink"><span class="text-brand-blue">${I.clock}</span> Fast Response &amp; Reliable Team</div>
         </div>
       </div>
       <div class="relative" data-reveal>
         <div class="relative overflow-hidden rounded-3xl border border-mist-200 bg-white shadow-float">
-          <img src="assets/hero.svg" alt="Spotless, professionally cleaned modern living room in Muscat" class="w-full" width="640" height="520" loading="eager" />
+          <img src="${prefix}assets/hero.svg" alt="Spotless, professionally cleaned modern living room in Muscat" class="w-full" width="640" height="520" loading="eager" />
         </div>
         <div class="absolute left-4 top-4 flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 shadow-soft backdrop-blur sm:left-6 sm:top-6">
           <span class="h-2.5 w-2.5 rounded-full bg-brand-green"></span>
@@ -166,40 +124,40 @@ module.exports = function render(ctx) {
         </div>
       </div>
     </div>
-  </section>
+  </section>`;
 
-  <!-- STATS -->
+  const statsSection = () => `
   <section class="border-y border-mist-100 bg-mist-50">
     <div class="container-x grid grid-cols-2 gap-6 py-10 sm:grid-cols-4">
       ${stats.map((s) => `<div class="text-center" data-reveal><div class="font-display text-3xl font-extrabold gradient-text sm:text-4xl">${s.n}</div><div class="mt-1 text-sm font-medium text-slatey-500">${s.l}</div></div>`).join("\n")}
     </div>
-  </section>
+  </section>`;
 
-  <!-- SERVICES -->
+  const servicesSection = (prefix, withHeading = true) => `
   <section id="services" class="py-20 sm:py-28">
     <div class="container-x">
-      <div class="mx-auto max-w-2xl text-center" data-reveal>
+      ${withHeading ? `<div class="mx-auto max-w-2xl text-center" data-reveal>
         <span class="pill-green">Our Services</span>
         <h2 class="mt-5 text-3xl font-extrabold sm:text-4xl lg:text-5xl">Everything you need to keep your space spotless</h2>
-        <p class="mt-4 text-lg text-slatey-500">One trusted team for cleaning, pest control, sanitization and manpower — across Muscat.</p>
-      </div>
-      <div class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        ${serviceCards}
+        <p class="mt-4 text-lg text-slatey-500">One trusted team for cleaning, pest control, sanitization, termite treatment and manpower — across Muscat.</p>
+      </div>` : ""}
+      <div class="${withHeading ? "mt-14 " : ""}grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        ${serviceCards(prefix)}
       </div>
       <div class="mt-12 flex flex-col items-center justify-between gap-5 rounded-3xl bg-brand-gradient-soft p-8 text-center sm:flex-row sm:text-left" data-reveal>
         <p class="text-lg font-bold text-ink">Need a custom plan for your home or business?</p>
-        <a href="#contact" class="btn-gradient !px-7 !py-4">Request a Free Quote ${I.arrow}</a>
+        <a href="${prefix}contact.html" class="btn-gradient !px-7 !py-4">Request a Free Quote ${I.arrow}</a>
       </div>
     </div>
-  </section>
+  </section>`;
 
-  <!-- WHY US -->
+  const whySection = (prefix, withEyebrow = true) => `
   <section id="why" class="bg-mist-50 py-20 sm:py-28">
     <div class="container-x">
       <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
         <div data-reveal>
-          <span class="pill-blue">Why Choose Us</span>
-          <h2 class="mt-5 text-3xl font-extrabold sm:text-4xl">A cleaning partner Muscat businesses &amp; families rely on</h2>
+          ${withEyebrow ? `<span class="pill-blue">Why Choose Us</span>` : ""}
+          <h2 class="${withEyebrow ? "mt-5 " : ""}text-3xl font-extrabold sm:text-4xl">A cleaning partner Muscat businesses &amp; families rely on</h2>
           <p class="mt-4 text-lg text-slatey-500">Our mission is to provide safe, high-quality services that exceed expectations at a very reasonable cost — built on tested processes, quality products, high-end equipment and skilled employees.</p>
           <div class="mt-8 grid gap-4 sm:grid-cols-2">
             ${why.map((w) => `
@@ -220,15 +178,15 @@ module.exports = function render(ctx) {
                   .map((t) => `<li class="flex items-center gap-3 text-ink"><span class="flex h-6 w-6 flex-none items-center justify-center rounded-full bg-brand-gradient text-white">${I.check}</span><span class="font-medium">${t}</span></li>`)
                   .join("\n")}
               </ul>
-              <a href="#contact" class="btn-gradient mt-8 w-full">Get started ${I.arrow}</a>
+              <a href="${prefix}contact.html" class="btn-gradient mt-8 w-full">Get started ${I.arrow}</a>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </section>
+  </section>`;
 
-  <!-- HOW IT WORKS -->
+  const howSection = () => `
   <section id="how" class="py-20 sm:py-28">
     <div class="container-x">
       <div class="mx-auto max-w-2xl text-center" data-reveal>
@@ -260,28 +218,26 @@ module.exports = function render(ctx) {
         </div>
       </div>
     </div>
-  </section>
+  </section>`;
 
-  <!-- ABOUT -->
+  const aboutSection = (prefix, withEyebrow = true) => `
   <section id="about" class="bg-mist-50 py-20 sm:py-28">
     <div class="container-x">
       <div class="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
         <div class="lg:col-span-5" data-reveal>
-          <div class="relative">
-            <div class="rounded-3xl bg-brand-gradient-soft p-8">
-              <img src="${prefix}assets/nawara-muscat-oman.svg" alt="Nawara Muscat Trading &amp; Contracting" style="height:104px;width:auto;max-width:300px;object-fit:contain;display:block" onerror="this.style.visibility='hidden';" />
-              <p class="mt-6 font-display text-2xl font-extrabold text-ink">Cleaning Company in Oman</p>
-              <p class="mt-3 text-lg" dir="rtl" lang="ar">${BIZ.nameAr}</p>
-              <div class="mt-8 grid grid-cols-2 gap-4">
-                <div class="rounded-2xl bg-white p-5 shadow-card"><div class="font-display text-2xl font-extrabold gradient-text">German</div><div class="text-sm text-slatey-500">recommended equipment</div></div>
-                <div class="rounded-2xl bg-white p-5 shadow-card"><div class="font-display text-2xl font-extrabold gradient-text">Eco</div><div class="text-sm text-slatey-500">friendly products</div></div>
-              </div>
+          <div class="rounded-3xl bg-brand-gradient-soft p-8">
+            <img src="${prefix}assets/nawara-muscat-oman.svg" alt="Nawara Muscat Trading &amp; Contracting" style="height:104px;width:auto;max-width:300px;object-fit:contain;display:block" onerror="this.style.visibility='hidden';" />
+            <p class="mt-6 font-display text-2xl font-extrabold text-ink">Cleaning Company in Oman</p>
+            <p class="mt-3 text-lg" dir="rtl" lang="ar">${BIZ.nameAr}</p>
+            <div class="mt-8 grid grid-cols-2 gap-4">
+              <div class="rounded-2xl bg-white p-5 shadow-card"><div class="font-display text-2xl font-extrabold gradient-text">German</div><div class="text-sm text-slatey-500">recommended equipment</div></div>
+              <div class="rounded-2xl bg-white p-5 shadow-card"><div class="font-display text-2xl font-extrabold gradient-text">Eco</div><div class="text-sm text-slatey-500">friendly products</div></div>
             </div>
           </div>
         </div>
         <div class="lg:col-span-7" data-reveal>
-          <span class="pill-green">About Us</span>
-          <h2 class="mt-5 text-3xl font-extrabold sm:text-4xl">A locally based Omani cleaning &amp; contracting company</h2>
+          ${withEyebrow ? `<span class="pill-green">About Us</span>` : ""}
+          <h2 class="${withEyebrow ? "mt-5 " : ""}text-3xl font-extrabold sm:text-4xl">A locally based Omani cleaning &amp; contracting company</h2>
           <p class="mt-5 text-lg leading-relaxed text-slatey-500">
             Nawara Muscat Trading &amp; Contracting specialises in cleaning, deep sanitizing, maintenance, pest control, loading &amp; unloading and manpower supply. Established with a high ethical manner, we provide quality services drawn from experience across a wide range of industries.
           </p>
@@ -296,9 +252,9 @@ module.exports = function render(ctx) {
         </div>
       </div>
     </div>
-  </section>
+  </section>`;
 
-  <!-- TESTIMONIALS -->
+  const testimonialsSection = () => `
   <section class="py-20 sm:py-28">
     <div class="container-x">
       <div class="mx-auto max-w-2xl text-center" data-reveal>
@@ -307,11 +263,7 @@ module.exports = function render(ctx) {
         <p class="mt-4 text-lg text-slatey-500">A few words from the people and teams we keep spotless.</p>
       </div>
       <div class="mt-14 grid gap-6 lg:grid-cols-3">
-        ${[
-          { q: "Fast, professional and thorough. The team deep-cleaned our villa before moving in and it felt brand new. Highly recommended.", n: "Ahmed Al-Balushi", r: "Homeowner, Al Khuwair" },
-          { q: "We use Nawara for monthly office cleaning and pest control. Always on time, always reliable — exactly what a busy office needs.", n: "Mariam Al-Saadi", r: "Office Manager, Ruwi" },
-          { q: "Booked the sofa and carpet cleaning and the results were impressive. Friendly staff and a very fair price. Will use again.", n: "John Mathew", r: "Resident, Al Mawaleh" },
-        ]
+        ${testimonials
           .map(
             (t) => `
         <figure class="flex h-full flex-col rounded-2xl border border-mist-200 bg-white p-7 shadow-card" data-reveal>
@@ -327,9 +279,9 @@ module.exports = function render(ctx) {
           .join("\n")}
       </div>
     </div>
-  </section>
+  </section>`;
 
-  <!-- FAQ -->
+  const faqSection = (prefix) => `
   <section id="faq" class="bg-mist-50 py-20 sm:py-28">
     <div class="container-x">
       <div class="grid gap-12 lg:grid-cols-12 lg:gap-16">
@@ -362,29 +314,152 @@ module.exports = function render(ctx) {
         </div>
       </div>
     </div>
-  </section>
+  </section>`;
 
-  <!-- CTA BAND -->
+  const ctaBand = (prefix) => `
   <section class="bg-mist-50 pb-20 pt-4 sm:pb-28">
     <div class="container-x">
       <div class="relative overflow-hidden rounded-3xl bg-brand-gradient px-8 py-14 text-center shadow-float sm:px-16 sm:py-20" data-reveal>
         <div class="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-white/10"></div>
         <div class="pointer-events-none absolute -bottom-20 -left-10 h-72 w-72 rounded-full bg-white/10"></div>
         <h2 class="relative mx-auto max-w-2xl text-3xl font-extrabold text-white sm:text-4xl">Ready for a spotless, healthier space?</h2>
-        <p class="relative mx-auto mt-4 max-w-xl text-lg text-white/90">Hire Nawara Muscat today and get professional cleaning, pest control and sanitization across Muscat and Oman.</p>
+        <p class="relative mx-auto mt-4 max-w-xl text-lg text-white/90">Hire Nawara Muscat today for professional cleaning, pest control, sanitization and more across Muscat and Oman.</p>
         <div class="relative mt-8 flex flex-col justify-center gap-3 sm:flex-row">
           <a href="tel:${BIZ.phoneTel}" class="btn !bg-white !text-brand-dark hover:!-translate-y-0.5 text-base !px-7 !py-4">${I.phone} Call ${BIZ.phoneDisplay}</a>
           <a href="${WA_DEFAULT}" target="_blank" rel="noopener" class="btn border border-white/40 !text-white hover:!bg-white/10 text-base !px-7 !py-4">${I.whatsapp} Chat With Us</a>
         </div>
       </div>
     </div>
-  </section>
+  </section>`;
 
-  ${contactSection(prefix)}
-  ${faqJsonLd}`;
-  }
+  const contactSection = (prefix) => `
+  <section id="contact" class="bg-mist-50 py-20 sm:py-28">
+    <div class="container-x">
+      <div class="grid gap-10 lg:grid-cols-2 lg:gap-16">
+        <div data-reveal>
+          <span class="pill-blue">Get in touch</span>
+          <h2 class="mt-5 text-3xl sm:text-4xl">Book your service or request a free quote</h2>
+          <p class="mt-4 max-w-md text-lg text-slatey-500">Tell us what you need and our team will get back to you fast. Reliable cleaning, sanitization, pest control, termite treatment and manpower — across Muscat.</p>
+          <div class="mt-8 space-y-4">
+            <a href="tel:${BIZ.phoneTel}" class="flex items-center gap-4 rounded-2xl border border-mist-200 bg-white p-4 shadow-card transition hover:shadow-cardHover">
+              <span class="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-blue/10 text-brand-blue">${I.phone}</span>
+              <span><span class="block text-xs font-semibold uppercase tracking-wider text-slatey-400">Call us</span><span class="block font-bold text-ink">${BIZ.phoneDisplay}</span></span>
+            </a>
+            <a href="${WA_DEFAULT}" target="_blank" rel="noopener" class="flex items-center gap-4 rounded-2xl border border-mist-200 bg-white p-4 shadow-card transition hover:shadow-cardHover">
+              <span class="flex h-12 w-12 items-center justify-center rounded-xl bg-[#1FA855]/10 text-[#1FA855]">${I.whatsapp}</span>
+              <span><span class="block text-xs font-semibold uppercase tracking-wider text-slatey-400">WhatsApp</span><span class="block font-bold text-ink">Chat with our team</span></span>
+            </a>
+            <a href="mailto:${BIZ.email}" class="flex items-center gap-4 rounded-2xl border border-mist-200 bg-white p-4 shadow-card transition hover:shadow-cardHover">
+              <span class="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-green/10 text-brand-leaf">${I.mail}</span>
+              <span><span class="block text-xs font-semibold uppercase tracking-wider text-slatey-400">Email</span><span class="block font-bold text-ink">${BIZ.email}</span></span>
+            </a>
+            <div class="flex items-center gap-4 rounded-2xl border border-mist-200 bg-white p-4 shadow-card">
+              <span class="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-teal/10 text-brand-teal">${I.location}</span>
+              <span><span class="block text-xs font-semibold uppercase tracking-wider text-slatey-400">Location</span><span class="block font-bold text-ink">${BIZ.address}</span></span>
+            </div>
+            <div class="flex items-center gap-4 rounded-2xl border border-mist-200 bg-white p-4 shadow-card">
+              <span class="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-blue/10 text-brand-blue">${I.clock}</span>
+              <span><span class="block text-xs font-semibold uppercase tracking-wider text-slatey-400">Working hours</span><span class="block font-bold text-ink">${BIZ.hours}</span></span>
+            </div>
+          </div>
+        </div>
+        <div data-reveal>
+          <div class="rounded-3xl border border-mist-200 bg-white p-7 shadow-soft sm:p-9">
+            <h3 class="text-xl font-bold text-ink">Request a free quote</h3>
+            <p class="mt-1 mb-6 text-sm text-slatey-500">No obligation — just honest advice and a fair price.</p>
+            ${quoteForm}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>`;
 
-  /* ---------------- SERVICE PAGE ---------------- */
+  const mapSection = () => `
+  <section class="bg-mist-50 pb-20 pt-0 sm:pb-28">
+    <div class="container-x">
+      <div class="overflow-hidden rounded-3xl border border-mist-200 shadow-card" data-reveal>
+        <iframe title="Nawara Muscat — Muscat, Oman" src="https://www.google.com/maps?q=Muscat%2C%20Oman&output=embed" width="100%" height="420" style="border:0;display:block" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </section>`;
+
+  const pageBanner = (prefix, { crumb, eyebrow, title, subtitle }) => `
+  <section class="relative overflow-hidden border-b border-mist-100">
+    <div class="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-brand-blue/10 blur-3xl"></div>
+    <div class="pointer-events-none absolute -left-20 top-16 h-72 w-72 rounded-full bg-brand-green/10 blur-3xl"></div>
+    <div class="container-x relative py-14 text-center sm:py-20">
+      <nav class="mb-5 flex items-center justify-center gap-2 text-sm text-slatey-400">
+        <a href="${prefix}index.html" class="hover:text-brand-blue">Home</a><span>/</span><span class="text-ink">${crumb}</span>
+      </nav>
+      <span class="pill-green">${eyebrow}</span>
+      <h1 class="mx-auto mt-5 max-w-3xl font-display text-4xl font-extrabold text-ink sm:text-5xl">${title}</h1>
+      <p class="mx-auto mt-4 max-w-2xl text-lg text-slatey-500">${subtitle}</p>
+    </div>
+  </section>`;
+
+  /* ---------------- page bodies ---------------- */
+  const homeBody = () => {
+    const p = "";
+    return (
+      heroSection(p) + statsSection() + servicesSection(p, true) + whySection(p) +
+      howSection() + aboutSection(p) + testimonialsSection() + faqSection(p) +
+      ctaBand(p) + contactSection(p) + faqJsonLd
+    );
+  };
+
+  const servicesBody = () => {
+    const p = "";
+    return (
+      pageBanner(p, {
+        crumb: "Services",
+        eyebrow: "Our Services",
+        title: "Cleaning, pest control & maintenance services in Muscat",
+        subtitle: "One trusted team for everything that keeps your home or business spotless, safe and pest-free across Muscat and Oman.",
+      }) +
+      servicesSection(p, false) + howSection() + ctaBand(p)
+    );
+  };
+
+  const aboutBody = () => {
+    const p = "";
+    return (
+      pageBanner(p, {
+        crumb: "About Us",
+        eyebrow: "About Us",
+        title: "A locally based Omani cleaning & contracting company",
+        subtitle: "Cleaning, sanitizing, maintenance, pest control and manpower supply — delivered with high ethics, quality products and skilled people.",
+      }) +
+      aboutSection(p, false) + statsSection() + whySection(p) + testimonialsSection() + ctaBand(p)
+    );
+  };
+
+  const whyBody = () => {
+    const p = "";
+    return (
+      pageBanner(p, {
+        crumb: "Why Choose Us",
+        eyebrow: "Why Choose Us",
+        title: "Why Muscat trusts Nawara Muscat",
+        subtitle: "Trained teams, eco-friendly products, German-grade equipment and a fast, reliable service — at a fair price.",
+      }) +
+      whySection(p, false) + howSection() + testimonialsSection() + faqSection(p) + ctaBand(p) + faqJsonLd
+    );
+  };
+
+  const contactBody = () => {
+    const p = "";
+    return (
+      pageBanner(p, {
+        crumb: "Contact",
+        eyebrow: "Contact Us",
+        title: "Get in touch with Nawara Muscat",
+        subtitle: "Call, WhatsApp or send the quick form — we'll reply fast with honest advice and a fair quote.",
+      }) +
+      contactSection(p) + mapSection()
+    );
+  };
+
+  /* ---------------- service detail page ---------------- */
   function renderBlocks(blocks) {
     return blocks
       .map((b) => {
@@ -412,14 +487,13 @@ module.exports = function render(ctx) {
     const prefix = "../";
     const others = SERVICES.filter((s) => s.slug !== svc.slug).slice(0, 3);
     return `
-  <!-- BREADCRUMB + HERO -->
   <section class="relative overflow-hidden bg-mist-50">
     <div class="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-brand-blue/10 blur-3xl"></div>
     <div class="container-x relative grid items-center gap-12 py-14 lg:grid-cols-2 lg:py-20">
       <div data-reveal>
         <nav class="mb-6 flex items-center gap-2 text-sm text-slatey-400">
           <a href="${prefix}index.html" class="hover:text-brand-blue">Home</a><span>/</span>
-          <a href="${prefix}index.html#services" class="hover:text-brand-blue">Services</a><span>/</span>
+          <a href="${prefix}services.html" class="hover:text-brand-blue">Services</a><span>/</span>
           <span class="text-ink">${svc.name}</span>
         </nav>
         <span class="pill-blue">${svc.eyebrow}</span>
@@ -427,7 +501,7 @@ module.exports = function render(ctx) {
         <p class="mt-5 max-w-xl text-lg leading-relaxed text-slatey-500">${svc.lead}</p>
         <div class="mt-8 flex flex-col gap-3 sm:flex-row">
           <a href="tel:${BIZ.phoneTel}" class="btn-gradient text-base !px-7 !py-4">${I.phone} Call Now</a>
-          <a href="${whatsappLink("Hello Nawara Muscat, I'm interested in your " + svc.name + " service.")}" target="_blank" rel="noopener" class="btn-whatsapp text-base !px-7 !py-4">${I.whatsapp} Chat With Us</a>
+          <a href="${whatsappLink("Hi Nawara Muscat, I'm interested in your " + svc.name + " service.")}" target="_blank" rel="noopener" class="btn-whatsapp text-base !px-7 !py-4">${I.whatsapp} Chat With Us</a>
         </div>
       </div>
       <div data-reveal>
@@ -449,18 +523,17 @@ module.exports = function render(ctx) {
     </div>
   </section>
 
-  <!-- CONTENT -->
   <section class="py-16 sm:py-20">
     <div class="container-x grid gap-12 lg:grid-cols-12 lg:gap-16">
       <article class="prose-nawara lg:col-span-8">
         ${renderBlocks(svc.blocks)}
         <div class="mt-10 flex flex-col items-center justify-between gap-4 rounded-2xl bg-brand-gradient-soft p-7 sm:flex-row">
           <p class="text-lg font-bold text-ink">Ready to book ${svc.name.toLowerCase()}?</p>
-          <a href="${prefix}index.html#contact" class="btn-gradient !px-6 !py-3.5">Get a Free Quote ${I.arrow}</a>
+          <a href="${prefix}contact.html" class="btn-gradient !px-6 !py-3.5">Get a Free Quote ${I.arrow}</a>
         </div>
       </article>
       <aside class="lg:col-span-4">
-        <div class="sticky top-24 space-y-6">
+        <div class="sticky top-28 space-y-6">
           <div class="rounded-2xl border border-mist-200 bg-white p-6 shadow-card">
             <h3 class="text-lg">Talk to our team</h3>
             <p class="mt-1 text-sm text-slatey-500">Fast response, friendly advice and a fair quote.</p>
@@ -471,11 +544,10 @@ module.exports = function render(ctx) {
             <h3 class="text-lg">Other services</h3>
             <ul class="mt-4 space-y-2">
               ${others
-                .map(
-                  (s) => `<li><a href="${s.slug}.html" class="link-arrow !text-ink hover:!text-brand-blue">${s.name} ${I.arrowUpRight}</a></li>`
-                )
+                .map((s) => `<li><a href="${s.slug}.html" class="link-arrow !text-ink hover:!text-brand-blue">${s.name} ${I.arrowUpRight}</a></li>`)
                 .join("\n")}
             </ul>
+            <a href="${prefix}services.html" class="link-arrow mt-4">View all services ${I.arrowUpRight}</a>
           </div>
         </div>
       </aside>
@@ -485,50 +557,65 @@ module.exports = function render(ctx) {
   ${contactSection(prefix)}`;
   }
 
-  /* ---------------- WRITE FILES ---------------- */
-  const outHome = layout({
-    title: "Nawara Muscat | Professional Cleaning & Maintenance Services in Muscat, Oman",
-    description:
-      "Nawara Muscat Trading & Contracting — professional cleaning, pest control, termite treatment, sanitization and cleaning manpower supply across Muscat, Oman. Book your service today.",
-    prefix: "",
-    active: "home",
-    canonical: BIZ.domain + "/",
-    body: homeBody(),
-  });
-  fs.writeFileSync(path.join(__dirname, "..", "index.html"), outHome);
+  /* ---------------- write files ---------------- */
+  const write = (file, html) => fs.writeFileSync(path.join(__dirname, "..", file), html);
+
+  write("index.html", layout({
+    title: "Nawara Muscat | Cleaning, Pest Control & Maintenance Services in Muscat, Oman",
+    description: "Nawara Muscat Trading & Contracting — professional cleaning, pest control, termite treatment, sanitization and manpower supply across Muscat, Oman. Book your service today.",
+    prefix: "", active: "home", canonical: BIZ.domain + "/", body: homeBody(),
+  }));
+
+  write("services.html", layout({
+    title: "Our Services | Cleaning, Pest Control & Maintenance — Nawara Muscat",
+    description: "All Nawara Muscat services: building & house cleaning, sofa & carpet cleaning, pest control, termite treatment, sanitization and cleaning manpower supply in Muscat, Oman.",
+    prefix: "", active: "services", canonical: BIZ.domain + "/services.html", body: servicesBody(),
+  }));
+
+  write("about.html", layout({
+    title: "About Us | Nawara Muscat Trading & Contracting",
+    description: "About Nawara Muscat Trading & Contracting — a locally based Omani company providing cleaning, sanitization, maintenance, pest control and manpower supply across Muscat.",
+    prefix: "", active: "about", canonical: BIZ.domain + "/about.html", body: aboutBody(),
+  }));
+
+  write("why-choose-us.html", layout({
+    title: "Why Choose Us | Nawara Muscat",
+    description: "Why choose Nawara Muscat — trusted local experts, fast response, eco-friendly products, German-grade equipment and skilled, vetted staff across Muscat, Oman.",
+    prefix: "", active: "why", canonical: BIZ.domain + "/why-choose-us.html", body: whyBody(),
+  }));
+
+  write("contact.html", layout({
+    title: "Contact Us | Nawara Muscat",
+    description: "Contact Nawara Muscat — call, WhatsApp or request a free quote for cleaning, pest control, sanitization, termite treatment and manpower supply in Muscat, Oman.",
+    prefix: "", active: "contact", canonical: BIZ.domain + "/contact.html", body: contactBody(),
+  }));
 
   SERVICES.forEach((svc) => {
-    const out = layout({
+    write(`services/${svc.slug}.html`, layout({
       title: `${svc.name} in Muscat | Nawara Muscat`,
       description: `${svc.lead}`.slice(0, 158),
-      prefix: "../",
-      active: "services",
-      canonical: `${BIZ.domain}/services/${svc.slug}.html`,
-      body: serviceBody(svc),
-    });
-    fs.writeFileSync(path.join(__dirname, "..", "services", `${svc.slug}.html`), out);
+      prefix: "../", active: "services", canonical: `${BIZ.domain}/services/${svc.slug}.html`, body: serviceBody(svc),
+    }));
   });
 
   // sitemap.xml
   const today = new Date().toISOString().slice(0, 10);
   const urls = [
     { loc: BIZ.domain + "/", pri: "1.0" },
+    { loc: BIZ.domain + "/services.html", pri: "0.9" },
+    { loc: BIZ.domain + "/about.html", pri: "0.7" },
+    { loc: BIZ.domain + "/why-choose-us.html", pri: "0.7" },
+    { loc: BIZ.domain + "/contact.html", pri: "0.7" },
     ...SERVICES.map((s) => ({ loc: `${BIZ.domain}/services/${s.slug}.html`, pri: "0.8" })),
   ];
-  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+  write("sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls
-  .map((u) => `  <url><loc>${u.loc}</loc><lastmod>${today}</lastmod><priority>${u.pri}</priority></url>`)
-  .join("\n")}
+${urls.map((u) => `  <url><loc>${u.loc}</loc><lastmod>${today}</lastmod><priority>${u.pri}</priority></url>`).join("\n")}
 </urlset>
-`;
-  fs.writeFileSync(path.join(__dirname, "..", "sitemap.xml"), sitemap);
+`);
 
   // robots.txt
-  fs.writeFileSync(
-    path.join(__dirname, "..", "robots.txt"),
-    `User-agent: *\nAllow: /\n\nSitemap: ${BIZ.domain}/sitemap.xml\n`
-  );
+  write("robots.txt", `User-agent: *\nAllow: /\n\nSitemap: ${BIZ.domain}/sitemap.xml\n`);
 
-  console.log("✓ Generated index.html + " + SERVICES.length + " service pages + sitemap.xml + robots.txt");
+  console.log("✓ Generated home + 4 pages + " + SERVICES.length + " service pages + sitemap + robots");
 };
