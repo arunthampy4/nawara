@@ -226,7 +226,7 @@ module.exports = function render(ctx) {
       <div class="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
         <div class="lg:col-span-5" data-reveal>
           <div class="rounded-3xl bg-brand-gradient-soft p-8">
-            <img src="${prefix}assets/nawara-muscat-oman.svg" alt="Nawara Muscat Trading &amp; Contracting" style="height:104px;width:auto;max-width:300px;object-fit:contain;display:block" onerror="this.style.visibility='hidden';" />
+            <img src="${prefix}assets/${BIZ.logoFile}" alt="Nawara Muscat Trading &amp; Contracting" width="500" height="300" style="height:96px;width:auto;max-width:300px;object-fit:contain;display:block" onerror="this.style.visibility='hidden';" />
             <p class="mt-6 font-display text-2xl font-extrabold text-ink">Cleaning Company in Oman</p>
             <p class="mt-3 text-lg" dir="rtl" lang="ar">${BIZ.nameAr}</p>
             <div class="mt-8 grid grid-cols-2 gap-4">
@@ -560,41 +560,71 @@ module.exports = function render(ctx) {
   /* ---------------- write files ---------------- */
   const write = (file, html) => fs.writeFileSync(path.join(__dirname, "..", file), html);
 
+  const crumb = (...items) => items; // [{name,url}]
+  const BASE_KW = "cleaning services Muscat, cleaning company Oman, deep cleaning Muscat, pest control Muscat, termite treatment Oman, sanitization Muscat, disinfection Oman, sofa carpet cleaning Muscat, cleaning manpower supply Oman, Nawara Muscat";
+
   write("index.html", layout({
     title: "Nawara Muscat | Cleaning, Pest Control & Maintenance Services in Muscat, Oman",
     description: "Nawara Muscat Trading & Contracting — professional cleaning, pest control, termite treatment, sanitization and manpower supply across Muscat, Oman. Book your service today.",
+    keywords: BASE_KW,
     prefix: "", active: "home", canonical: BIZ.domain + "/", body: homeBody(),
+    breadcrumbs: crumb({ name: "Home", url: BIZ.domain + "/" }),
   }));
 
   write("services.html", layout({
-    title: "Our Services | Cleaning, Pest Control & Maintenance — Nawara Muscat",
+    title: "Cleaning, Pest Control & Maintenance Services in Muscat | Nawara Muscat",
     description: "All Nawara Muscat services: building & house cleaning, sofa & carpet cleaning, pest control, termite treatment, sanitization and cleaning manpower supply in Muscat, Oman.",
+    keywords: BASE_KW,
     prefix: "", active: "services", canonical: BIZ.domain + "/services.html", body: servicesBody(),
+    breadcrumbs: crumb({ name: "Home", url: BIZ.domain + "/" }, { name: "Services", url: BIZ.domain + "/services.html" }),
   }));
 
   write("about.html", layout({
-    title: "About Us | Nawara Muscat Trading & Contracting",
+    title: "About Us | Cleaning Company in Muscat, Oman — Nawara Muscat",
     description: "About Nawara Muscat Trading & Contracting — a locally based Omani company providing cleaning, sanitization, maintenance, pest control and manpower supply across Muscat.",
+    keywords: "cleaning company Muscat, about Nawara Muscat, Omani cleaning contractor, " + BASE_KW,
     prefix: "", active: "about", canonical: BIZ.domain + "/about.html", body: aboutBody(),
+    breadcrumbs: crumb({ name: "Home", url: BIZ.domain + "/" }, { name: "About Us", url: BIZ.domain + "/about.html" }),
   }));
 
   write("why-choose-us.html", layout({
-    title: "Why Choose Us | Nawara Muscat",
+    title: "Why Choose Us | Best Cleaning & Pest Control Company in Muscat",
     description: "Why choose Nawara Muscat — trusted local experts, fast response, eco-friendly products, German-grade equipment and skilled, vetted staff across Muscat, Oman.",
+    keywords: "best cleaning company Muscat, reliable pest control Muscat, " + BASE_KW,
     prefix: "", active: "why", canonical: BIZ.domain + "/why-choose-us.html", body: whyBody(),
+    breadcrumbs: crumb({ name: "Home", url: BIZ.domain + "/" }, { name: "Why Choose Us", url: BIZ.domain + "/why-choose-us.html" }),
   }));
 
   write("contact.html", layout({
-    title: "Contact Us | Nawara Muscat",
+    title: "Contact Us | Book Cleaning & Pest Control in Muscat — Nawara Muscat",
     description: "Contact Nawara Muscat — call, WhatsApp or request a free quote for cleaning, pest control, sanitization, termite treatment and manpower supply in Muscat, Oman.",
+    keywords: "contact Nawara Muscat, book cleaning Muscat, cleaning quote Oman, " + BASE_KW,
     prefix: "", active: "contact", canonical: BIZ.domain + "/contact.html", body: contactBody(),
+    breadcrumbs: crumb({ name: "Home", url: BIZ.domain + "/" }, { name: "Contact", url: BIZ.domain + "/contact.html" }),
   }));
 
   SERVICES.forEach((svc) => {
+    const url = `${BIZ.domain}/services/${svc.slug}.html`;
     write(`services/${svc.slug}.html`, layout({
-      title: `${svc.name} in Muscat | Nawara Muscat`,
+      title: `${svc.name} in Muscat, Oman | Nawara Muscat`,
       description: `${svc.lead}`.slice(0, 158),
-      prefix: "../", active: "services", canonical: `${BIZ.domain}/services/${svc.slug}.html`, body: serviceBody(svc),
+      keywords: `${svc.name} Muscat, ${svc.name} Oman, ${BASE_KW}`,
+      prefix: "../", active: "services", canonical: url, body: serviceBody(svc),
+      breadcrumbs: crumb(
+        { name: "Home", url: BIZ.domain + "/" },
+        { name: "Services", url: BIZ.domain + "/services.html" },
+        { name: svc.name, url }
+      ),
+      schema: [{
+        "@context": "https://schema.org",
+        "@type": "Service",
+        serviceType: svc.name,
+        name: svc.h1,
+        description: svc.lead,
+        url,
+        areaServed: { "@type": "City", name: "Muscat" },
+        provider: { "@type": "LocalBusiness", "@id": BIZ.domain + "/#business", name: BIZ.name, telephone: BIZ.phoneTel },
+      }],
     }));
   });
 

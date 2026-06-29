@@ -22,6 +22,9 @@ const BIZ = {
   country: "Oman",
   address: "Muscat, Sultanate of Oman",
   hours: "Sat – Thu: 7:00 AM – 9:00 PM",
+  areas: ["Al Khuwair", "Ruwi", "Seeb", "Bawshar", "Al Mawaleh", "Al Ghubra", "Qurum", "Azaiba", "Madinat Al Sultan Qaboos", "Muttrah"],
+  // Logo file in /assets (500x300). Space in the name is URL-encoded so it loads.
+  logoFile: "nawara%20cleaning%20new.svg",
 };
 
 const whatsappLink = (msg) =>
@@ -70,7 +73,7 @@ function logoMark(cls = "h-10 w-10") {
 function logoFull(prefix) {
   // Header shows the client's exact brand logo (assets/nawara-muscat-oman.svg).
   return `<a href="${prefix}index.html" class="flex items-center group" aria-label="Nawara Muscat Trading &amp; Contracting — Home">
-    <img src="${prefix}assets/nawara-muscat-oman.svg" alt="Nawara Muscat Trading &amp; Contracting" style="height:clamp(64px,8.5vw,116px);width:auto;max-width:360px;object-fit:contain;display:block" class="transition-transform group-hover:scale-[1.02]" onerror="this.style.visibility='hidden';" />
+    <img src="${prefix}assets/${BIZ.logoFile}" alt="Nawara Muscat Trading &amp; Contracting" width="500" height="300" style="height:clamp(58px,6.5vw,92px);width:auto;max-width:340px;object-fit:contain;display:block" class="transition-transform group-hover:scale-[1.02]" onerror="this.style.visibility='hidden';" />
   </a>`;
 }
 
@@ -123,7 +126,7 @@ function header(prefix, active) {
   const link = (href, label, id) =>
     `<a href="${href}" class="nav-link ${active === id ? "!text-brand-blue" : ""}">${label}</a>`;
   return `<header class="sticky top-0 z-50 border-b border-mist-100 bg-white/85 backdrop-blur-md">
-  <div class="container-x flex min-h-[88px] items-center justify-between gap-4 py-2 sm:min-h-[128px]">
+  <div class="container-x flex min-h-[80px] items-center justify-between gap-4 py-2 sm:min-h-[104px]">
     ${logoFull(prefix)}
     <nav class="hidden items-center gap-8 lg:flex">
       ${link(prefix + "index.html", "Home", "home")}
@@ -168,11 +171,9 @@ function footer(prefix) {
   <div class="container-x py-16">
     <div class="grid gap-12 lg:grid-cols-4">
       <div class="lg:col-span-1">
-        <div class="flex flex-col leading-tight">
-          <span class="font-display text-2xl font-extrabold text-white">Nawara Muscat</span>
-          <span class="mt-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-cyan">Trading &amp; Contracting</span>
-        </div>
-        <p class="mt-3 font-display text-lg text-white/80" dir="rtl" lang="ar">${BIZ.nameAr}</p>
+        <span class="inline-flex rounded-2xl bg-white px-4 py-3 shadow-soft">
+          <img src="${prefix}assets/${BIZ.logoFile}" alt="Nawara Muscat Trading &amp; Contracting" width="500" height="300" style="height:62px;width:auto;max-width:200px;object-fit:contain;display:block" onerror="this.style.visibility='hidden';" />
+        </span>
         <p class="mt-5 text-sm leading-relaxed text-slatey-400">A locally based Omani company for cleaning, deep sanitizing, maintenance, pest control and manpower supply across Muscat.</p>
       </div>
       <div>
@@ -234,7 +235,7 @@ const SCRIPT = `<script>
 /* ------------------------------------------------------------------ */
 /* Layout                                                              */
 /* ------------------------------------------------------------------ */
-function layout({ title, description, prefix, active, body, canonical }) {
+function layout({ title, description, prefix, active, body, canonical, keywords, ogImage, breadcrumbs, schema }) {
   LOGO_PREFIX = prefix; // so logo image path resolves on home and /services/ pages
   return `<!DOCTYPE html>
 <html lang="en">
@@ -243,35 +244,70 @@ function layout({ title, description, prefix, active, body, canonical }) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>${title}</title>
   <meta name="description" content="${description}" />
+  ${keywords ? `<meta name="keywords" content="${keywords}" />` : ""}
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="author" content="${BIZ.name}" />
   <link rel="canonical" href="${canonical}" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="${title}" />
   <meta property="og:description" content="${description}" />
   <meta property="og:url" content="${canonical}" />
   <meta property="og:site_name" content="${BIZ.name}" />
+  <meta property="og:locale" content="en_OM" />
+  <meta property="og:image" content="${ogImage || BIZ.domain + "/assets/og-image.png"}" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="${BIZ.name}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="${title}" />
+  <meta name="twitter:description" content="${description}" />
+  <meta name="twitter:image" content="${ogImage || BIZ.domain + "/assets/og-image.png"}" />
   <meta name="theme-color" content="#1295D8" />
   <link rel="icon" href="${prefix}assets/fav.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="${prefix}assets/fav.svg" />
   <link rel="stylesheet" href="${prefix}dist/styles.css" />
   <script type="application/ld+json">${JSON.stringify({
     "@context": "https://schema.org",
-    "@type": "CleaningService",
+    "@type": ["LocalBusiness", "CleaningService"],
+    "@id": BIZ.domain + "/#business",
     name: BIZ.name,
-    alternateName: BIZ.nameAr,
-    image: BIZ.domain + "/assets/fav.svg",
+    alternateName: [BIZ.shortName, BIZ.nameAr],
+    image: BIZ.domain + "/assets/og-image.png",
+    logo: BIZ.domain + "/assets/" + BIZ.logoFile,
     url: BIZ.domain + "/",
     telephone: BIZ.phoneTel,
     email: BIZ.email,
     priceRange: "$$",
-    areaServed: { "@type": "City", name: "Muscat" },
-    address: { "@type": "PostalAddress", addressLocality: "Muscat", addressCountry: "OM" },
-    openingHours: "Sa-Th 07:00-21:00",
+    currenciesAccepted: "OMR",
+    areaServed: ["Muscat", "Oman", ...BIZ.areas].map((n) => ({ "@type": "Place", name: n })),
+    address: { "@type": "PostalAddress", addressLocality: "Muscat", addressRegion: "Muscat", addressCountry: "OM" },
+    geo: { "@type": "GeoCoordinates", latitude: 23.5859, longitude: 58.4059 },
+    openingHoursSpecification: {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
+      opens: "07:00", closes: "21:00",
+    },
     description:
-      "Professional cleaning, pest control, termite treatment, sanitization and cleaning manpower supply across Muscat, Oman.",
+      "Professional cleaning, deep cleaning, pest control, termite treatment, sanitization, disinfection and cleaning manpower supply across Muscat, Oman.",
+    knowsAbout: ["House cleaning", "Building cleaning", "Deep cleaning", "Sofa & carpet cleaning", "Pest control", "Termite treatment", "Sanitization", "Disinfection", "Cleaning manpower supply"],
     makesOffer: SERVICES.map((s) => ({
       "@type": "Offer",
       itemOffered: { "@type": "Service", name: s.name, url: BIZ.domain + "/services/" + s.slug + ".html" },
     })),
   })}</script>
+  <script type="application/ld+json">${JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: BIZ.name,
+    url: BIZ.domain + "/",
+    inLanguage: "en",
+  })}</script>
+  ${breadcrumbs ? `<script type="application/ld+json">${JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: breadcrumbs.map((b, i) => ({ "@type": "ListItem", position: i + 1, name: b.name, item: b.url })),
+  })}</script>` : ""}
+  ${(schema || []).map((s) => `<script type="application/ld+json">${JSON.stringify(s)}</script>`).join("\n  ")}
 </head>
 <body>
   ${header(prefix, active)}
