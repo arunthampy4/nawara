@@ -95,6 +95,30 @@ The simplest path: connect the repo to Netlify/Vercel/GitHub Pages and publish
 the root. No build command is required because `dist/styles.css` is committed —
 though you may set `npm run build` as the build step if preferred.
 
+### Deploying to Hostinger (file manager / cPanel)
+
+1. Run `node build-site.js && npm run build` locally so `index.html`,
+   `services/`, `dist/`, `sitemap.xml` and `robots.txt` are up to date.
+2. In Hostinger → **Files → File Manager**, open `public_html`.
+3. Upload these to `public_html` (keep the folder structure):
+   `index.html`, `services/`, `dist/`, `assets/`, `fonts/`, `sitemap.xml`, `robots.txt`.
+   *(You can skip `node_modules/`, `src/`, `content/` and the build files — they're not needed at runtime.)*
+   Tip: zip those folders, upload the zip, then "Extract" inside `public_html`.
+4. Point the `nawaramuscat.com` domain at the hosting and enable free SSL.
+   The site is static, so it works immediately — no Node/PHP setup required.
+
+> After uploading, submit `https://nawaramuscat.com/sitemap.xml` in
+> Google Search Console to help recover ranking lost with the old domain.
+
+## Things to personalise before launch
+
+- **Contact details** — `info@nawaramuscat.com`, hours and address are sensible
+  defaults in `build-site.js` (`BIZ`). Replace with the real ones.
+- **Testimonials** — the three reviews in `content/render.js` are realistic
+  **samples**; swap them for genuine client reviews before going live.
+- **Photos** — hero and service visuals are clean SVG illustrations. Dropping in
+  real job photos (in `assets/`) will make the site pop.
+
 ---
 
 ## Arabic version (planned)

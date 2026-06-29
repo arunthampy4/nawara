@@ -115,6 +115,23 @@ module.exports = function render(ctx) {
       { n: "7", l: "Days a week support" },
     ];
 
+    const faqs = [
+      { q: "Which areas in Muscat do you cover?", a: "We serve homes and businesses across all of Muscat and the wider Oman region — including Al Khuwair, Ruwi, Al Mawaleh, Seeb, Bawshar and more." },
+      { q: "Are your cleaning products safe for children and pets?", a: "Yes. We use non-toxic, eco-friendly products and German-recommended equipment that are safe around children, pets and all surface types." },
+      { q: "Do you offer one-off cleans or only contracts?", a: "Both. You can book a single one-off clean or set up a recurring daily, weekly or monthly schedule — whatever suits you." },
+      { q: "How do I get a price?", a: "Call or WhatsApp us, or send the quick quote form. For larger jobs we'll do a short survey and give you a clear, fixed price with no surprises." },
+      { q: "Is the pest control treatment odorless and safe to stay during?", a: "Our standard insect treatments are odorless and hassle-free, so in most cases there's no need to leave the premises. We'll always advise you per job." },
+    ];
+    const faqJsonLd = `<script type="application/ld+json">${JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqs.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    })}</script>`;
+
     return `
   <!-- HERO -->
   <section class="relative overflow-hidden">
@@ -211,8 +228,42 @@ module.exports = function render(ctx) {
     </div>
   </section>
 
+  <!-- HOW IT WORKS -->
+  <section id="how" class="py-20 sm:py-28">
+    <div class="container-x">
+      <div class="mx-auto max-w-2xl text-center" data-reveal>
+        <span class="pill-blue">How It Works</span>
+        <h2 class="mt-5 text-3xl font-extrabold sm:text-4xl lg:text-5xl">Booking us is quick and easy</h2>
+        <p class="mt-4 text-lg text-slatey-500">From first call to a spotless space — four simple steps, zero hassle.</p>
+      </div>
+      <div class="relative mt-16">
+        <div class="pointer-events-none absolute left-0 right-0 top-7 hidden h-px bg-gradient-to-r from-transparent via-mist-200 to-transparent lg:block"></div>
+        <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+          ${[
+            { icon: I.phone, t: "Get in touch", d: "Call, WhatsApp or send the quick form with what you need." },
+            { icon: I.clipboard, t: "Survey & quote", d: "We assess your space and share a clear, fair price — no surprises." },
+            { icon: I.sparkles, t: "We get to work", d: "Our trained team arrives on time with eco-friendly, German-grade equipment." },
+            { icon: I.smile, t: "Enjoy the result", d: "Relax in a spotless, sanitized and pest-free space — guaranteed." },
+          ]
+            .map(
+              (s, i) => `
+          <div class="relative text-center" data-reveal>
+            <div class="relative mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-white text-brand-blue shadow-card ring-1 ring-mist-200">
+              ${s.icon}
+              <span class="absolute -right-2 -top-2 flex h-7 w-7 items-center justify-center rounded-full bg-brand-gradient font-display text-xs font-extrabold text-white shadow-soft">${i + 1}</span>
+            </div>
+            <h3 class="mt-6 text-lg">${s.t}</h3>
+            <p class="mt-2 text-sm text-slatey-500">${s.d}</p>
+          </div>`
+            )
+            .join("\n")}
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ABOUT -->
-  <section id="about" class="py-20 sm:py-28">
+  <section id="about" class="bg-mist-50 py-20 sm:py-28">
     <div class="container-x">
       <div class="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
         <div class="lg:col-span-5" data-reveal>
@@ -247,8 +298,74 @@ module.exports = function render(ctx) {
     </div>
   </section>
 
+  <!-- TESTIMONIALS -->
+  <section class="py-20 sm:py-28">
+    <div class="container-x">
+      <div class="mx-auto max-w-2xl text-center" data-reveal>
+        <span class="pill-green">Testimonials</span>
+        <h2 class="mt-5 text-3xl font-extrabold sm:text-4xl lg:text-5xl">Trusted by homes &amp; businesses in Muscat</h2>
+        <p class="mt-4 text-lg text-slatey-500">A few words from the people and teams we keep spotless.</p>
+      </div>
+      <div class="mt-14 grid gap-6 lg:grid-cols-3">
+        ${[
+          { q: "Fast, professional and thorough. The team deep-cleaned our villa before moving in and it felt brand new. Highly recommended.", n: "Ahmed Al-Balushi", r: "Homeowner, Al Khuwair" },
+          { q: "We use Nawara for monthly office cleaning and pest control. Always on time, always reliable — exactly what a busy office needs.", n: "Mariam Al-Saadi", r: "Office Manager, Ruwi" },
+          { q: "Booked the sofa and carpet cleaning and the results were impressive. Friendly staff and a very fair price. Will use again.", n: "John Mathew", r: "Resident, Al Mawaleh" },
+        ]
+          .map(
+            (t) => `
+        <figure class="flex h-full flex-col rounded-2xl border border-mist-200 bg-white p-7 shadow-card" data-reveal>
+          <span class="text-brand-blue/30">${I.quote}</span>
+          <div class="mt-3 flex gap-0.5 text-amber-400">${I.star}${I.star}${I.star}${I.star}${I.star}</div>
+          <blockquote class="mt-4 flex-1 leading-relaxed text-ink-soft">“${t.q}”</blockquote>
+          <figcaption class="mt-6 flex items-center gap-3">
+            <span class="flex h-11 w-11 items-center justify-center rounded-full bg-brand-gradient font-display font-bold text-white">${t.n.split(" ").map((w) => w[0]).slice(0, 2).join("")}</span>
+            <span><span class="block font-bold text-ink">${t.n}</span><span class="block text-sm text-slatey-400">${t.r}</span></span>
+          </figcaption>
+        </figure>`
+          )
+          .join("\n")}
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="bg-mist-50 py-20 sm:py-28">
+    <div class="container-x">
+      <div class="grid gap-12 lg:grid-cols-12 lg:gap-16">
+        <div class="lg:col-span-5" data-reveal>
+          <span class="pill-blue">FAQ</span>
+          <h2 class="mt-5 text-3xl font-extrabold sm:text-4xl">Frequently asked questions</h2>
+          <p class="mt-4 text-lg text-slatey-500">Can't find what you're looking for? Our team is one message away.</p>
+          <div class="mt-7 flex flex-col gap-3 sm:flex-row lg:flex-col">
+            <a href="tel:${BIZ.phoneTel}" class="btn-gradient">${I.phone} Call ${BIZ.phoneDisplay}</a>
+            <a href="${WA_DEFAULT}" target="_blank" rel="noopener" class="btn-whatsapp">${I.whatsapp} WhatsApp Us</a>
+          </div>
+        </div>
+        <div class="lg:col-span-7" data-reveal>
+          <div class="divide-y divide-mist-200 overflow-hidden rounded-2xl border border-mist-200 bg-white">
+            ${faqs
+              .map(
+                (f) => `
+            <details class="group">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 font-semibold text-ink transition hover:text-brand-blue">
+                <span>${f.q}</span>
+                <span class="flex h-7 w-7 flex-none items-center justify-center rounded-full bg-mist-100 text-brand-blue transition-transform duration-300 group-open:rotate-45">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" class="h-4 w-4"><path d="M12 5v14M5 12h14"/></svg>
+                </span>
+              </summary>
+              <p class="px-6 pb-5 -mt-1 leading-relaxed text-slatey-500">${f.a}</p>
+            </details>`
+              )
+              .join("\n")}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- CTA BAND -->
-  <section class="py-4">
+  <section class="bg-mist-50 pb-20 pt-4 sm:pb-28">
     <div class="container-x">
       <div class="relative overflow-hidden rounded-3xl bg-brand-gradient px-8 py-14 text-center shadow-float sm:px-16 sm:py-20" data-reveal>
         <div class="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-white/10"></div>
@@ -263,7 +380,8 @@ module.exports = function render(ctx) {
     </div>
   </section>
 
-  ${contactSection(prefix)}`;
+  ${contactSection(prefix)}
+  ${faqJsonLd}`;
   }
 
   /* ---------------- SERVICE PAGE ---------------- */
