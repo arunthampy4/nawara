@@ -269,7 +269,7 @@ module.exports = function render(ctx) {
         <div class="lg:col-span-5" data-reveal>
           <div class="relative">
             <div class="rounded-3xl bg-brand-gradient-soft p-8">
-              <img src="${prefix}assets/nawara-muscat-oman.svg" alt="Nawara Muscat Trading &amp; Contracting" class="h-28 w-auto" onerror="this.style.visibility='hidden';" />
+              <img src="${prefix}assets/nawara-muscat-oman.svg" alt="Nawara Muscat Trading &amp; Contracting" style="height:104px;width:auto;max-width:300px;object-fit:contain;display:block" onerror="this.style.visibility='hidden';" />
               <p class="mt-6 font-display text-2xl font-extrabold text-ink">Cleaning Company in Oman</p>
               <p class="mt-3 text-lg" dir="rtl" lang="ar">${BIZ.nameAr}</p>
               <div class="mt-8 grid grid-cols-2 gap-4">

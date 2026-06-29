@@ -70,7 +70,7 @@ function logoMark(cls = "h-10 w-10") {
 function logoFull(prefix) {
   // Header shows the client's exact brand logo (assets/nawara-muscat-oman.svg).
   return `<a href="${prefix}index.html" class="flex items-center group" aria-label="Nawara Muscat Trading &amp; Contracting — Home">
-    <img src="${prefix}assets/nawara-muscat-oman.svg" alt="Nawara Muscat Trading &amp; Contracting" class="h-[72px] w-auto sm:h-24 transition-transform group-hover:scale-[1.02]" onerror="this.style.visibility='hidden';" />
+    <img src="${prefix}assets/nawara-muscat-oman.svg" alt="Nawara Muscat Trading &amp; Contracting" style="height:clamp(52px,6.5vw,88px);width:auto;max-width:300px;object-fit:contain;display:block" class="transition-transform group-hover:scale-[1.02]" onerror="this.style.visibility='hidden';" />
   </a>`;
 }
 
@@ -169,7 +169,7 @@ function footer(prefix) {
     <div class="grid gap-12 lg:grid-cols-4">
       <div class="lg:col-span-1">
         <div class="inline-flex items-center rounded-2xl bg-white p-3 shadow-soft">
-          <img src="${prefix}assets/nawara-muscat-oman.svg" alt="Nawara Muscat Trading &amp; Contracting" class="h-20 w-auto" onerror="this.style.visibility='hidden';" />
+          <img src="${prefix}assets/nawara-muscat-oman.svg" alt="Nawara Muscat Trading &amp; Contracting" style="height:74px;width:auto;max-width:240px;object-fit:contain;display:block" onerror="this.style.visibility='hidden';" />
         </div>
         <p class="mt-5 text-sm leading-relaxed text-slatey-400">A locally based Omani company for cleaning, deep sanitizing, maintenance, pest control and manpower supply across Muscat.</p>
         <p class="mt-4 font-display text-lg" dir="rtl" lang="ar">${BIZ.nameAr}</p>
