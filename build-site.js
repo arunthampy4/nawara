@@ -33,19 +33,25 @@ const WA_DEFAULT = whatsappLink(
 /* ------------------------------------------------------------------ */
 /* SVG: logo mark                                                      */
 /* ------------------------------------------------------------------ */
+let _logoSeq = 0;
 function logoMark(cls = "h-10 w-10") {
-  return `<svg class="${cls}" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  const u = `nl${++_logoSeq}`; // unique gradient ids per instance
+  return `<svg class="${cls}" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
   <defs>
-    <linearGradient id="dropG" x1="8" y1="6" x2="34" y2="44" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#22BCE6"/><stop offset="1" stop-color="#1295D8"/>
+    <linearGradient id="${u}g" x1="22" y1="22" x2="98" y2="108" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6CC24A"/><stop offset="1" stop-color="#2E9B3E"/>
     </linearGradient>
-    <linearGradient id="leafG" x1="24" y1="10" x2="42" y2="40" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#5CC85F"/><stop offset="1" stop-color="#2FA84F"/>
+    <linearGradient id="${u}b" x1="42" y1="30" x2="80" y2="88" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#41B6EA"/><stop offset="1" stop-color="#1C77C0"/>
+    </linearGradient>
+    <linearGradient id="${u}d" x1="48" y1="12" x2="72" y2="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#5CC3F1"/><stop offset="1" stop-color="#1A84CE"/>
     </linearGradient>
   </defs>
-  <path d="M20 4.5C20 4.5 7 18.2 7 28.4 7 36 12.8 42 20 42c2.2 0 4.3-.6 6-1.6C20.7 37 17 31.2 17 24.6c0-7.2 3-13.9 3-20.1Z" fill="url(#dropG)"/>
-  <path d="M41.5 9.7c-9.6.6-17.4 5.2-19.8 14.2-1 3.8-.5 8 1.6 11.6 6.6-1.2 13.4-5.4 16.3-13.1 1.5-4 1.8-8.2 1.9-12.7Z" fill="url(#leafG)"/>
-  <path d="M24.5 33.5c2.4-6 6.7-10.6 12.4-13.6" stroke="#fff" stroke-opacity=".55" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M83.2 35.5 A34 34 0 1 1 36.8 35.5" fill="none" stroke="url(#${u}g)" stroke-width="12.5" stroke-linecap="round"/>
+  <path d="M66 39 C 84 45 86 71 67 83 C 58 88 47 87 41.5 81.5 C 54 82 61 73 61 61 C 61 51 60 44 66 39 Z" fill="url(#${u}b)"/>
+  <path d="M60 13 C 67.5 25.5 75 33 75 41.2 A 15 15 0 1 1 45 41.2 C 45 33 52.5 25.5 60 13 Z" fill="url(#${u}d)"/>
+  <ellipse cx="54.5" cy="35" rx="3.3" ry="5" fill="#fff" opacity=".42"/>
 </svg>`;
 }
 
@@ -111,6 +117,7 @@ function header(prefix, active) {
   <div class="container-x flex h-[68px] items-center justify-between gap-4">
     ${logoFull(prefix)}
     <nav class="hidden items-center gap-8 lg:flex">
+      ${link(prefix + "index.html", "Home", "home")}
       ${link(prefix + "index.html#services", "Services", "services")}
       ${link(prefix + "index.html#why", "Why Us", "why")}
       ${link(prefix + "index.html#about", "About", "about")}
@@ -129,6 +136,7 @@ function header(prefix, active) {
   </div>
   <div id="mobileMenu" class="hidden border-t border-mist-100 bg-white lg:hidden">
     <nav class="container-x flex flex-col gap-1 py-4">
+      <a href="${prefix}index.html" class="rounded-lg px-3 py-2.5 font-semibold text-ink hover:bg-mist-50">Home</a>
       <a href="${prefix}index.html#services" class="rounded-lg px-3 py-2.5 font-semibold text-ink hover:bg-mist-50">Services</a>
       <a href="${prefix}index.html#why" class="rounded-lg px-3 py-2.5 font-semibold text-ink hover:bg-mist-50">Why Us</a>
       <a href="${prefix}index.html#about" class="rounded-lg px-3 py-2.5 font-semibold text-ink hover:bg-mist-50">About</a>

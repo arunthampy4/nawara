@@ -491,7 +491,7 @@ module.exports = function render(ctx) {
     description:
       "Nawara Muscat Trading & Contracting — professional cleaning, pest control, termite treatment, sanitization and cleaning manpower supply across Muscat, Oman. Book your service today.",
     prefix: "",
-    active: "",
+    active: "home",
     canonical: BIZ.domain + "/",
     body: homeBody(),
   });
