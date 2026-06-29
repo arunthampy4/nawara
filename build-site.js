@@ -34,7 +34,10 @@ const WA_DEFAULT = whatsappLink(
 /* SVG: logo mark                                                      */
 /* ------------------------------------------------------------------ */
 let _logoSeq = 0;
-function logoMark(cls = "h-10 w-10") {
+let LOGO_PREFIX = ""; // set per-page by layout() so the image path resolves correctly
+
+// Inline SVG fallback (shown only if assets/logo-mark.png is not present yet)
+function logoSvg(cls) {
   const u = `nl${++_logoSeq}`; // unique gradient ids per instance
   return `<svg class="${cls}" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
   <defs>
@@ -53,6 +56,15 @@ function logoMark(cls = "h-10 w-10") {
   <path d="M60 13 C 67.5 25.5 75 33 75 41.2 A 15 15 0 1 1 45 41.2 C 45 33 52.5 25.5 60 13 Z" fill="url(#${u}d)"/>
   <ellipse cx="54.5" cy="35" rx="3.3" ry="5" fill="#fff" opacity=".42"/>
 </svg>`;
+}
+
+// Logo mark: uses assets/logo-mark.png when present, otherwise the inline SVG.
+// Drop the real icon (transparent PNG/SVG) at assets/logo-mark.png and it is used automatically.
+function logoMark(cls = "h-10 w-10") {
+  return `<span class="${cls} relative inline-block align-middle">
+    <img src="${LOGO_PREFIX}assets/logo-mark.svg" alt="Nawara Muscat logo" class="absolute inset-0 h-full w-full object-contain" onerror="this.style.display='none';this.nextElementSibling.style.display='block';" />
+    <span style="display:none" class="block h-full w-full">${logoSvg("h-full w-full")}</span>
+  </span>`;
 }
 
 function logoFull(prefix) {
@@ -229,6 +241,7 @@ const SCRIPT = `<script>
 /* Layout                                                              */
 /* ------------------------------------------------------------------ */
 function layout({ title, description, prefix, active, body, canonical }) {
+  LOGO_PREFIX = prefix; // so logo image path resolves on home and /services/ pages
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
