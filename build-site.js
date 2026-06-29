@@ -254,14 +254,16 @@ function layout({ title, description, prefix, active, body, canonical, keywords,
   <meta property="og:url" content="${canonical}" />
   <meta property="og:site_name" content="${BIZ.name}" />
   <meta property="og:locale" content="en_OM" />
-  <meta property="og:image" content="${ogImage || BIZ.domain + "/assets/og-image.png"}" />
+  <meta property="og:image" content="${ogImage || BIZ.domain + "/assets/og-image.jpg"}" />
+  <meta property="og:image:secure_url" content="${ogImage || BIZ.domain + "/assets/og-image.jpg"}" />
+  <meta property="og:image:type" content="image/jpeg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="${BIZ.name}" />
+  <meta property="og:image:alt" content="${BIZ.name} — Cleaning, Pest Control &amp; Maintenance in Muscat" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="${title}" />
   <meta name="twitter:description" content="${description}" />
-  <meta name="twitter:image" content="${ogImage || BIZ.domain + "/assets/og-image.png"}" />
+  <meta name="twitter:image" content="${ogImage || BIZ.domain + "/assets/og-image.jpg"}" />
   <meta name="theme-color" content="#1295D8" />
   <link rel="icon" href="${prefix}assets/fav.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="${prefix}assets/fav.svg" />
@@ -272,7 +274,7 @@ function layout({ title, description, prefix, active, body, canonical, keywords,
     "@id": BIZ.domain + "/#business",
     name: BIZ.name,
     alternateName: [BIZ.shortName, BIZ.nameAr],
-    image: BIZ.domain + "/assets/og-image.png",
+    image: BIZ.domain + "/assets/og-image.jpg",
     logo: BIZ.domain + "/assets/" + BIZ.logoFile,
     url: BIZ.domain + "/",
     telephone: BIZ.phoneTel,
