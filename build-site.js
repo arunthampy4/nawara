@@ -27,7 +27,7 @@ const BIZ = {
 const whatsappLink = (msg) =>
   `https://wa.me/${BIZ.whatsapp}?text=${encodeURIComponent(msg)}`;
 const WA_DEFAULT = whatsappLink(
-  "Hello Nawara Muscat, I'd like to know more about your cleaning services."
+  "Hi Nawara Muscat, I'd like to know more about your services."
 );
 
 /* ------------------------------------------------------------------ */
@@ -68,17 +68,9 @@ function logoMark(cls = "h-10 w-10") {
 }
 
 function logoFull(prefix) {
-  // Header shows the full brand lockup (assets/logo-mark.svg) on its own.
-  // Falls back to the inline icon + text if the file is missing.
+  // Header shows the client's exact brand logo (assets/nawara-muscat-oman.svg).
   return `<a href="${prefix}index.html" class="flex items-center group" aria-label="Nawara Muscat Trading &amp; Contracting — Home">
-    <img src="${prefix}assets/logo-mark.svg" alt="Nawara Muscat Trading &amp; Contracting" class="h-16 w-auto sm:h-[84px] transition-transform group-hover:scale-[1.03]" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
-    <span style="display:none" class="items-center gap-3">
-      ${logoSvg("h-11 w-11")}
-      <span class="flex flex-col leading-tight">
-        <span class="font-display font-extrabold text-[15px] sm:text-base text-ink tracking-tight">Nawara Muscat</span>
-        <span class="text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.14em] text-slatey-400">Trading &amp; Contracting</span>
-      </span>
-    </span>
+    <img src="${prefix}assets/nawara-muscat-oman.svg" alt="Nawara Muscat Trading &amp; Contracting" class="h-[72px] w-auto sm:h-24 transition-transform group-hover:scale-[1.02]" onerror="this.style.visibility='hidden';" />
   </a>`;
 }
 
@@ -131,7 +123,7 @@ function header(prefix, active) {
   const link = (href, label, id) =>
     `<a href="${href}" class="nav-link ${active === id ? "!text-brand-blue" : ""}">${label}</a>`;
   return `<header class="sticky top-0 z-50 border-b border-mist-100 bg-white/85 backdrop-blur-md">
-  <div class="container-x flex min-h-[92px] items-center justify-between gap-4 py-2">
+  <div class="container-x flex min-h-[88px] items-center justify-between gap-4 py-2 sm:min-h-[112px]">
     ${logoFull(prefix)}
     <nav class="hidden items-center gap-8 lg:flex">
       ${link(prefix + "index.html", "Home", "home")}
@@ -176,12 +168,8 @@ function footer(prefix) {
   <div class="container-x py-16">
     <div class="grid gap-12 lg:grid-cols-4">
       <div class="lg:col-span-1">
-        <div class="flex items-center gap-3">
-          ${logoSvg("h-11 w-11")}
-          <span class="flex flex-col leading-tight">
-            <span class="font-display font-extrabold text-white">Nawara Muscat</span>
-            <span class="text-[11px] font-semibold uppercase tracking-[0.14em] text-slatey-400">Trading &amp; Contracting</span>
-          </span>
+        <div class="inline-flex items-center rounded-2xl bg-white p-3 shadow-soft">
+          <img src="${prefix}assets/nawara-muscat-oman.svg" alt="Nawara Muscat Trading &amp; Contracting" class="h-20 w-auto" onerror="this.style.visibility='hidden';" />
         </div>
         <p class="mt-5 text-sm leading-relaxed text-slatey-400">A locally based Omani company for cleaning, deep sanitizing, maintenance, pest control and manpower supply across Muscat.</p>
         <p class="mt-4 font-display text-lg" dir="rtl" lang="ar">${BIZ.nameAr}</p>
@@ -261,14 +249,14 @@ function layout({ title, description, prefix, active, body, canonical }) {
   <meta property="og:url" content="${canonical}" />
   <meta property="og:site_name" content="${BIZ.name}" />
   <meta name="theme-color" content="#1295D8" />
-  <link rel="icon" href="${prefix}assets/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="${prefix}assets/fav.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="${prefix}dist/styles.css" />
   <script type="application/ld+json">${JSON.stringify({
     "@context": "https://schema.org",
     "@type": "CleaningService",
     name: BIZ.name,
     alternateName: BIZ.nameAr,
-    image: BIZ.domain + "/assets/favicon.svg",
+    image: BIZ.domain + "/assets/fav.svg",
     url: BIZ.domain + "/",
     telephone: BIZ.phoneTel,
     email: BIZ.email,
